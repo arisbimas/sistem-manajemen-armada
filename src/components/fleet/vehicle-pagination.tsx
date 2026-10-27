@@ -1,11 +1,12 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-const PAGE_SIZE_OPTIONS = [12, 24, 48]
+const PAGE_SIZE_OPTIONS = [12, 24, 48, 96]
 
 type VehiclePaginationProps = {
   page: number
   pageSize: number
   totalItems: number
+  isFetching?: boolean
   onPageChange: (page: number) => void
   onPageSizeChange: (pageSize: number) => void
 }
@@ -14,6 +15,7 @@ export function VehiclePagination({
   page,
   pageSize,
   totalItems,
+  isFetching = false,
   onPageChange,
   onPageSizeChange,
 }: VehiclePaginationProps) {
@@ -23,8 +25,9 @@ export function VehiclePagination({
 
   return (
     <nav
-      className="mt-6 flex flex-col gap-3 border-t border-rule pt-4 text-xs sm:flex-row sm:items-center sm:justify-between"
+      className="mt-4 flex flex-col gap-3 border-rule text-xs sm:flex-row sm:items-center sm:justify-between"
       aria-label="Pagination"
+      aria-busy={isFetching}
     >
       <p className="text-muted">
         {totalItems === 0
@@ -38,7 +41,8 @@ export function VehiclePagination({
           <select
             value={pageSize}
             onChange={(event) => onPageSizeChange(Number(event.target.value))}
-            className="h-8 rounded-control border border-rule-strong bg-surface px-2 text-xs text-ink"
+            disabled={isFetching}
+            className="h-8 rounded-control border border-rule-strong bg-surface px-2 text-xs text-ink disabled:cursor-not-allowed disabled:opacity-45"
           >
             {PAGE_SIZE_OPTIONS.map((option) => (
               <option key={option} value={option}>
@@ -56,7 +60,7 @@ export function VehiclePagination({
           <button
             type="button"
             onClick={() => onPageChange(page - 1)}
-            disabled={page <= 1}
+            disabled={isFetching || page <= 1}
             aria-label="Previous page"
             className="grid size-8 place-items-center rounded-control border border-rule-strong bg-surface transition-colors hover:bg-paper disabled:cursor-not-allowed disabled:opacity-45"
           >
@@ -65,7 +69,7 @@ export function VehiclePagination({
           <button
             type="button"
             onClick={() => onPageChange(page + 1)}
-            disabled={page >= totalPages}
+            disabled={isFetching || page >= totalPages}
             aria-label="Next page"
             className="grid size-8 place-items-center rounded-control border border-rule-strong bg-surface transition-colors hover:bg-paper disabled:cursor-not-allowed disabled:opacity-45"
           >
