@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 
+import { VehicleDetailDialog } from '@/components/fleet/vehicle-detail-dialog'
 import { VehicleFilters } from '@/components/fleet/vehicle-filters'
 import { VehicleGrid } from '@/components/fleet/vehicle-grid'
 import { VehicleGridSkeleton } from '@/components/fleet/vehicle-grid-skeleton'
@@ -17,6 +18,7 @@ export function FleetPage() {
   const [page, setPage] = useState(1)
   const [selectedRouteIds, setSelectedRouteIds] = useState<string[]>([])
   const [selectedTripIds, setSelectedTripIds] = useState<string[]>([])
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null)
 
   const debouncedRouteIds = useDebouncedValue(selectedRouteIds)
   const debouncedTripIds = useDebouncedValue(selectedTripIds)
@@ -61,6 +63,14 @@ export function FleetPage() {
     setSelectedRouteIds([])
     setSelectedTripIds([])
     setPage(1)
+  }
+
+  const handleSelectVehicle = (vehicle: Vehicle) => {
+    setSelectedVehicleId(vehicle.id)
+  }
+
+  const closeVehicleDetail = () => {
+    setSelectedVehicleId(null)
   }
 
   const retry = () => {
@@ -108,7 +118,7 @@ export function FleetPage() {
               )}
             </div>
           ) : (
-            <VehicleGrid vehicles={vehicles} />
+            <VehicleGrid vehicles={vehicles} onSelect={handleSelectVehicle} />
           )}
       </div>
 
@@ -125,6 +135,11 @@ export function FleetPage() {
             onPageSizeChange={handlePageSizeChange}
           />
         )}
+
+      <VehicleDetailDialog
+        vehicleId={selectedVehicleId}
+        onClose={closeVehicleDetail}
+      />
     </>
   )
 }

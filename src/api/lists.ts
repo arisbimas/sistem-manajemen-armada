@@ -1,11 +1,12 @@
 import { fetchJson } from '@/api/client'
+import { toMode, withHash } from '@/lib/transit'
 import type {
   RouteListResponse,
   RouteResource,
   TripListResponse,
   TripResource,
 } from '@/types/mbta'
-import type { RouteOption, TransitMode, TripOption } from '@/types/filters'
+import type { RouteOption, TripOption } from '@/types/filters'
 
 const BASE_URL = 'https://api-v3.mbta.com'
 const PAGE_LIMIT = 50
@@ -29,32 +30,6 @@ function parseNextOffset(link: string | null | undefined) {
   return Number.isFinite(offset) ? offset : null
 }
 
-function withHash(value: string, fallback: string) {
-  if (!value) {
-    return fallback
-  }
-
-  return value.startsWith('#') ? value : `#${value}`
-}
-
-// reference: https://gtfs.org/documentation/schedule/reference/#routestxt
-const MODE_LABELS: Record<number, TransitMode> = {
-  0: 'Light rail', // Tram, streetcar, light rail
-  1: 'Subway', // Subway, metro
-  2: 'Commuter rail', // Rail (MBTA uses this for CR-*)
-  3: 'Bus',
-  4: 'Ferry',
-  5: 'Cable tram',
-  6: 'Aerial lift',
-  7: 'Funicular',
-  11: 'Trolleybus',
-  12: 'Monorail',
-}
-
-function toMode(type: number): TransitMode {
-  return MODE_LABELS[type] ?? 'Other'
-}
-
 function mapRoute(resource: RouteResource): RouteOption {
   return {
     id: resource.id,
@@ -65,6 +40,7 @@ function mapRoute(resource: RouteResource): RouteOption {
     mode: toMode(resource.attributes.type),
     sortOrder: resource.attributes.sort_order ?? 0,
     directionNames: resource.attributes.direction_names ?? [],
+    directionDestinations: resource.attributes.direction_destinations ?? [],
   }
 }
 

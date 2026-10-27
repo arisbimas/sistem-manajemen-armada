@@ -22,3 +22,11 @@ export function formatDateTime(iso: string) {
 
   return dateTimeFormatter.format(date)
 }
+
+export function formatSpeed(metersPerSecond: number | null | undefined) {
+  if (typeof metersPerSecond !== 'number') {
+    return '—'
+  }
+
+  return `${(metersPerSecond * 3.6).toFixed(1)} km/h`
+}

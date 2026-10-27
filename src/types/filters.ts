@@ -20,6 +20,7 @@ export type RouteOption = {
   mode: TransitMode
   sortOrder: number
   directionNames: string[]
+  directionDestinations: string[]
 }
 
 export type TripOption = {

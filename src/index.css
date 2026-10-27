@@ -92,6 +92,14 @@
   }
 }
 
+@layer utilities {
+  .text-optical-center {
+    position: relative;
+    top: 0.06em;
+    line-height: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
 
   *,
