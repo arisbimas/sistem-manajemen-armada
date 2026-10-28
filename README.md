@@ -7,7 +7,7 @@ positions from the MBTA V3 API and presents them as a paginated card grid.
 
 - Live vehicle data from the MBTA V3 API
 - Vehicle cards with label, current status, latitude/longitude, and last update time
-- Vehicle detail dialog with route, trip, stop, coordinates, and live telemetry
+- Vehicle detail dialog with a Leaflet position map, route, trip, stop, coordinates, and live telemetry
 - Multi-select route and trip filters with infinite-scroll dropdowns
 - Server-side pagination with range, page size, page count, and previous/next
 - Loading skeletons, error state with retry, and empty state
@@ -23,6 +23,7 @@ positions from the MBTA V3 API and presents them as a paginated card grid.
 - Tailwind CSS 4
 - TanStack Query 5
 - Radix UI (Dialog, Popover)
+- Leaflet
 - Lucide icons
 
 ## Requirements
@@ -99,9 +100,11 @@ GET /vehicles/{id}?include=route,trip,stop
 
 The dialog shows a loading skeleton while fetching and an inline error with retry on failure. It
 displays the vehicle status, coordinates, last update, current or next stop, route, trip,
-accessibility, speed, and occupancy. A 404 response is reported as a vehicle that is no longer
-available in the live feed. The dialog closes with the close button, overlay click, or Escape key,
-and returns focus to the card.
+accessibility, speed, and occupancy. A Leaflet map centered on the vehicle position uses
+OpenStreetMap tiles with attribution; if coordinates are unavailable, the map area shows a
+fallback message. A 404 response is reported as a vehicle that is no longer available in the live
+feed. The dialog closes with the close button, overlay click, or Escape key, and returns focus to
+the card.
 
 The card displays the raw `current_status` value from the API (`IN_TRANSIT_TO`, `STOPPED_AT`,
 `INCOMING_AT`), so the operational state is not translated or inferred.
@@ -117,7 +120,9 @@ src/
   assets/
     fonts/          Overpass, latin subset
   components/
-    fleet/          Vehicle card, dialog, filters, grid, skeleton, pagination
+    fleet/          Vehicle card, filters, grid, skeleton, pagination
+      vehicle-detail/
+                    Dialog shell, Leaflet map, content, skeleton, error, shared parts
     ui/             Error state, multi-select, route bullet, status pill
   hooks/
     use-debounced-value.ts

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
 
 /* -----------------------------------------------------------------------------
    Typeface
@@ -110,4 +111,21 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Leaflet */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-paper);
+}
+
+.leaflet-control-attribution {
+  padding: 1px 6px;
+  font-size: 9px;
+  color: var(--color-muted);
+  background: rgb(255 255 255 / 0.88);
+}
+
+.leaflet-control-attribution a {
+  color: var(--color-primary);
 }

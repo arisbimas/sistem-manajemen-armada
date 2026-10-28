@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { VehicleDetailDialog } from '@/components/fleet/vehicle-detail-dialog'
+import { VehicleDetailDialog } from '@/components/fleet/vehicle-detail/vehicle-detail-dialog'
 import { VehicleFilters } from '@/components/fleet/vehicle-filters'
 import { VehicleGrid } from '@/components/fleet/vehicle-grid'
 import { VehicleGridSkeleton } from '@/components/fleet/vehicle-grid-skeleton'
@@ -83,8 +83,7 @@ export function FleetPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-[-0.02em]">Vehicles</h1>
-      <div className="mt-4">
+      <div>
         <VehicleFilters
           selectedRouteIds={selectedRouteIds}
           selectedTripIds={selectedTripIds}
